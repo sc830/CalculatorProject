@@ -1,12 +1,14 @@
 package calculatordemo2;
 import org.junit.jupiter.api.Test;
+
+import calculatordemo2.Calculator.twoOperator;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorTest {
     private static Calculator classUnderTest;
-
 
     @BeforeAll
     public static void setUp() {
@@ -59,5 +61,27 @@ class CalculatorTest {
     @Test
     void testThrowError() {
         assertThrows(Error.class, () -> classUnderTest.calcScience(null, 10.0));
+    }
+
+    // The following are tests for twoOpOperations.  They assume that 
+    // the method modifier is public.
+    @DisplayName("Testing 2+3*6: assumes public modifiers for mode, num1, num2 and twoOpOperations()")
+    @Test
+    public void perform_2_Plus_3_Times_6() {
+        classUnderTest.mode = twoOperator.add;
+        classUnderTest.num1 = 2.0;
+        classUnderTest.num2 = 3.0;
+        Double expectedResult = classUnderTest.num1 + classUnderTest.num2;
+        Double actualResult = classUnderTest.twoOpOperations();
+        // Test that 2+3 gets what we want.
+        assertEquals(expectedResult,actualResult);
+        // test that 2+3*6 gets what we want.
+        classUnderTest.mode = twoOperator.multiply;
+        classUnderTest.num1 = actualResult;
+        classUnderTest.num2 = 6.0;
+        expectedResult = classUnderTest.num1 * classUnderTest.num2;
+        actualResult = classUnderTest.twoOpOperations();
+        assertEquals(expectedResult,actualResult);
+
     }
 }

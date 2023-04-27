@@ -17,12 +17,12 @@ import javax.swing.JTextArea;
  */
 
 public class CalculatorUI implements ActionListener {
-	private final JFrame frame;
-	private final JPanel panel;
-	private final JTextArea text;
-	private final JButton jButtons[], add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan;
-	private final String[] buttonValue = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-	private final Calculator calc;
+	public final JFrame frame;
+	public final JPanel panel;
+	public final JTextArea text;
+	public final JButton jButtons[], add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan;
+	public final String[] buttonValue = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+	public final Calculator calc;
 
 	/**
 	 * The main top level GUI of the calculator and it's frame, button, and text area for # display
@@ -107,6 +107,8 @@ public class CalculatorUI implements ActionListener {
 		// check 0-9 and update textfield
 		for (int i = 0; i < 10; i++) {
 			if (source == jButtons[i]) {
+				// Insert the buttonvalue: method inserts rather than replaces
+				// because the text.select() method was not called previously
 				text.replaceSelection(buttonValue[i]);
 				return;
 			}

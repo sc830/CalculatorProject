@@ -18,14 +18,14 @@ public class Calculator{
 		square, squareRoot, oneDevidedBy, cos, sin, tan
 	}
 
-	private Double num1, num2;
-	private twoOperator mode = twoOperator.normal;
+	public Double num1, num2;
+	public twoOperator mode = twoOperator.normal;
 
 	/**
 	 * The final call in enumeration that returns the specificed operation result
 	 * @return returns the called operation's result
 	 */
-	private Double twoOpOperations() {
+	public Double twoOpOperations() {
 		if (mode == twoOperator.normal) {
 			return num2;
 		}

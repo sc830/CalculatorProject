@@ -3,12 +3,13 @@
  */
 package calculatordemo2;
 
+import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
-import java.lang.reflect.Field;  // This brings in the Field feature of Java Reflection
+// import java.lang.reflect.Field;  // This brings in the Field feature of Java Reflection
 
 class CalculatorUITest {
 
@@ -19,20 +20,29 @@ class CalculatorUITest {
         classUnderTest = new CalculatorUI();
     }
 
-    @DisplayName("Testing that writer writes the display")
+    @DisplayName("Testing that writer writes the display: assumes public fields")
     @Test
-    public void writerSetText() throws Exception {
-        // Use reflection to access the private field “text”
-        Class cls = classUnderTest.getClass();
-        Field field = cls.getDeclaredField("text");
-        field.setAccessible(true);
-        // Set the value of “text” to “mytext”
-        JTextArea text = (JTextArea) field.get(classUnderTest);
-        text.setText("mytext");
+    public void writerSetText() {
+        JTextArea textAreaUnderTest = classUnderTest.text;
+        Double numberToWrite = 22.2;
+        classUnderTest.writer(numberToWrite);
         // Test that the value of “text” is “mytext”
-        assertEquals("mytext", text.getText());
+        assertEquals(numberToWrite.toString(), textAreaUnderTest.getText());
     }
-    
+
+    @DisplayName("Testing Button[0] writes zero to display: assumes public fields ")
+    @Test
+    public void writeZeroToDisplay() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.jButtons[0], 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        String expectedDisplayText = classUnderTest.buttonValue[0];
+        String actualDisplayText = classUnderTest.text.getText();
+        assertEquals(expectedDisplayText,actualDisplayText);
+    }
+
     @Test 
     void appPanelIsCreated() {
         assertNotNull(classUnderTest, "app should have a panel object");

@@ -152,6 +152,66 @@ class CalculatorTest {
 
     }
 
+    @DisplayName("Testing 3-1+6: assumes public")
+    @Test
+    public void perform3Minus1Plus6() {
+        classUnderTest.mode = twoOperator.subtract;
+        classUnderTest.num1 = 3.0;
+        classUnderTest.num2 = 1.0;
+        Double expectedResult = classUnderTest.num1 - classUnderTest.num2;
+        Double actualResult = classUnderTest.twoOpOperations();
+        
+        assertEquals(expectedResult,actualResult);
+        
+        classUnderTest.mode = twoOperator.add;
+        classUnderTest.num1 = actualResult;
+        classUnderTest.num2 = 6.0;
+        expectedResult = classUnderTest.num1 + classUnderTest.num2;
+        actualResult = classUnderTest.twoOpOperations();
+        assertEquals(expectedResult,actualResult);
+
+    }
+
+    @DisplayName("Testing 6/2*7: assumes public")
+    @Test
+    public void perform6Div2Times7() {
+        classUnderTest.mode = twoOperator.divide;
+        classUnderTest.num1 = 6.0;
+        classUnderTest.num2 = 2.0;
+        Double expectedResult = classUnderTest.num1 / classUnderTest.num2;
+        Double actualResult = classUnderTest.twoOpOperations();
+        
+        assertEquals(expectedResult,actualResult);
+        
+        classUnderTest.mode = twoOperator.multiply;
+        classUnderTest.num1 = actualResult;
+        classUnderTest.num2 = 7.0;
+        expectedResult = classUnderTest.num1 * classUnderTest.num2;
+        actualResult = classUnderTest.twoOpOperations();
+        assertEquals(expectedResult,actualResult);
+
+    }
+
+    @DisplayName("Testing 14-7-6: assumes public")
+    @Test
+    public void perform14Minus7Minus6() {
+        classUnderTest.mode = twoOperator.subtract;
+        classUnderTest.num1 = 14.0;
+        classUnderTest.num2 = 7.0;
+        Double expectedResult = classUnderTest.num1 - classUnderTest.num2;
+        Double actualResult = classUnderTest.twoOpOperations();
+        
+        assertEquals(expectedResult,actualResult);
+        
+        classUnderTest.mode = twoOperator.subtract;
+        classUnderTest.num1 = actualResult;
+        classUnderTest.num2 = 6.0;
+        expectedResult = classUnderTest.num1 - classUnderTest.num2;
+        actualResult = classUnderTest.twoOpOperations();
+        assertEquals(expectedResult,actualResult);
+
+    }
+
     @DisplayName("Tests whether an error is thrown if a null mode is passed")
     @Test
     void testThrowError() {

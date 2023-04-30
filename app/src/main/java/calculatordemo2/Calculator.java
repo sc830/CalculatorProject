@@ -113,6 +113,15 @@ public class Calculator{
 		if (newMode == singleOperator.tan) {
 			return Math.tan(num);
 		}
+		if (newMode == singleOperator.acos) {
+			return Math.acos(num);
+		}
+		if (newMode == singleOperator.asin) {
+			return Math.asin(num);
+		}
+		if (newMode == singleOperator.atan) {
+			return Math.atan(num);
+		}
 		// never reach
 		throw new Error();
 	}

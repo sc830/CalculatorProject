@@ -30,6 +30,18 @@ class CalculatorUITest {
         assertEquals(numberToWrite.toString(), textAreaUnderTest.getText());
     }
 
+    @DisplayName("Testing that reader accurately reads text")
+    @Test
+    public void readerGetText() {
+        JTextArea textAreaUnderTest = classUnderTest.text;
+        Double value = 10;
+        Double read = 0;
+        textAreaUnderTest.setText(value.toString());
+        read = classUnderTest.reader();
+
+        assertEquals(read, textAreaUnderTest.getText());
+    }
+
     @DisplayName("Testing Button[0] writes zero to display: assumes public fields ")
     @Test
     public void writeZeroToDisplay() {

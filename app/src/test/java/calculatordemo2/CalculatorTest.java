@@ -94,10 +94,40 @@ class CalculatorTest {
         assertNotEquals(Double.NaN, classUnderTest.twoOpCaller(twoOperator.multiply, num));
     }
 
-    @DisplayName("Tests whether an error is thrown if a null mode is passed")
+    @DisplayName("Testing 4+5: assumes public") 
     @Test
-    void testThrowError() {
-        assertThrows(Error.class, () -> classUnderTest.calcScience(null, 10.0));
+    public void perform4Plus5() {
+        classUnderTest.num1 = 4.0;
+        classUnderTest.mode = twoOperator.add;
+        classUnderTest.num2 = 5.0;
+        assertEquals(classUnderTest.num1+classUnderTest.num2, classUnderTest.twoOpOperations());
+    }
+
+    @DisplayName("Testing 7-3: assumes public") 
+    @Test
+    public void perform7Minus3() {
+        classUnderTest.num1 = 7.0;
+        classUnderTest.mode = twoOperator.subtract;
+        classUnderTest.num2 = 3.0;
+        assertEquals(classUnderTest.num1-classUnderTest.num2, classUnderTest.twoOpOperations());
+    }
+
+    @DisplayName("Testing 9/3: assumes public") 
+    @Test
+    public void perform9Div3() {
+        classUnderTest.num1 = 9.0;
+        classUnderTest.mode = twoOperator.divide;
+        classUnderTest.num2 = 3.0;
+        assertEquals(classUnderTest.num1/classUnderTest.num2, classUnderTest.twoOpOperations());
+    }
+
+    @DisplayName("Testing 4*5: assumes public") 
+    @Test
+    public void perform4Times5() {
+        classUnderTest.num1 = 4.0;
+        classUnderTest.mode = twoOperator.multiply;
+        classUnderTest.num2 = 5.0;
+        assertEquals(classUnderTest.num1*classUnderTest.num2, classUnderTest.twoOpOperations());
     }
 
     // The following are tests for twoOpOperations.  They assume that 
@@ -120,5 +150,11 @@ class CalculatorTest {
         actualResult = classUnderTest.twoOpOperations();
         assertEquals(expectedResult,actualResult);
 
+    }
+
+    @DisplayName("Tests whether an error is thrown if a null mode is passed")
+    @Test
+    void testThrowError() {
+        assertThrows(Error.class, () -> classUnderTest.calcScience(null, 10.0));
     }
 }

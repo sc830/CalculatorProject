@@ -60,22 +60,38 @@ class CalculatorTest {
     @DisplayName("Tests the inverse cosine function in degrees")
     @Test
     void testAcos() {
-        double num = 60.0;
+        double num = 45.0;
         assertEquals(Math.acos(num), classUnderTest.calcScience(Calculator.singleOperator.acos, num));
     }
 
     @DisplayName("Tests the inverse sine function in degrees")
     @Test
     void testAsin() {
-        double num = 60.0;
+        double num = 30.0;
         assertEquals(Math.asin(num), classUnderTest.calcScience(Calculator.singleOperator.asin, num));
     }
 
     @DisplayName("Tests the inverse tangent function in degrees")
     @Test
-    void testTan() {
+    void testAtan() {
         double num = 60.0;
         assertEquals(Math.atan(num), classUnderTest.calcScience(Calculator.singleOperator.atan, num));
+    }
+
+    @DisplayName("Tests case 1 of twoOpCaller")
+    @Test
+    void testTwoOpCallerNormal() {
+        double num = 1.0;
+        assertEquals(Double.NaN, classUnderTest.twoOpCaller(twoOperator.normal, num));
+    }
+
+    @DisplayName("Tests case 2 of twoOpCaller")
+    @Test
+    void testTwoOpCallerOther() {
+        double num = 2.0;
+        classUnderTest.num1 = 2.0;
+        classUnderTest.mode = twoOperator.multiply;
+        assertNotEquals(Double.NaN, classUnderTest.twoOpCaller(twoOperator.multiply, num));
     }
 
     @DisplayName("Tests whether an error is thrown if a null mode is passed")

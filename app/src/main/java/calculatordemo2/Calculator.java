@@ -15,9 +15,8 @@ public class Calculator{
 	}
 
 	public enum singleOperator {
-		square, squareRoot, oneDevidedBy, cos, sin, tan
+		square, squareRoot, oneDevidedBy, cos, sin, tan, acos, asin, atan
 	}
-
 	public Double num1, num2;
 	public twoOperator mode = twoOperator.normal;
 

@@ -46,11 +46,11 @@ class CalculatorUITest {
     @Test
     public void writeZeroToDisplay() {
        
-        ActionEvent e = new ActionEvent(classUnderTest.jButtons[0], 
+        ActionEvent e = new ActionEvent(classUnderTest.buttonList.get(0), 
                                         ActionEvent.ACTION_PERFORMED, 
                                         "");
         classUnderTest.actionPerformed(e);
-        String expectedDisplayText = classUnderTest.buttonValue[0];
+        String expectedDisplayText = "0";
         String actualDisplayText = classUnderTest.text.getText();
         assertEquals(expectedDisplayText,actualDisplayText);
     }

@@ -30,7 +30,7 @@ public class CalculatorUI implements ActionListener {
 	public final JFrame frame;
 	public final JTextArea text;
 	public final JButton add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan, acos, asin, atan;
-	public ArrayList<JButton> buttonList;
+	public ArrayList<JButton> trigButtons, primButtons, numButtons, funcButtons;
 	public ArrayList<JPanel> panels;
 	public final Calculator calc;
 	public final JPanel mainPanel, numPanel, primPanel, funcPanel, trigPanel, invTrigPanel, cPanel;
@@ -39,8 +39,12 @@ public class CalculatorUI implements ActionListener {
 	 * The main top level GUI of the calculator and it's frame, button, and text area for # display
 	 */
 	public CalculatorUI() {
-		buttonList = new ArrayList<>();
+		trigButtons = new ArrayList<>();
+		primButtons = new ArrayList<>();
+		numButtons = new ArrayList<>();
+		funcButtons = new ArrayList<>();
 		panels = new ArrayList<>();
+
 		frame = new JFrame("Calculator");
 		frame.setResizable(true);
 		mainPanel = new JPanel(new GridBagLayout());
@@ -63,54 +67,53 @@ public class CalculatorUI implements ActionListener {
 		for (int i = 0; i < 10; i++) {
 			value = String.valueOf(i);
 			buttonHolder = new JButton(value);
-			buttonList.add(buttonHolder);
+			numButtons.add(buttonHolder);
 		}
 
 		// create buttons and add to master list
 		add = new JButton("+");
-		buttonList.add(add);
+		primButtons.add(add);
 
 		sub = new JButton("-");
-		buttonList.add(sub);
+		primButtons.add(sub);
 
 		mult = new JButton("*");
-		buttonList.add(mult);
+		primButtons.add(mult);
 
 		div = new JButton("/");
-		buttonList.add(div);
+		primButtons.add(div);
 
 		equal = new JButton("=");
-		buttonList.add(equal);
+		primButtons.add(equal);
 
 		sqrRt = new JButton("√");
-		buttonList.add(sqrRt);
+		funcButtons.add(sqrRt);
 
 		sqr = new JButton("x*x");
-		buttonList.add(sqr);
+		funcButtons.add(sqr);
 
 		inverse = new JButton("1/x");
-		buttonList.add(inverse);
+		funcButtons.add(inverse);
 
 		cos = new JButton("Cos");
-		buttonList.add(cos);
+		trigButtons.add(cos);
 
 		sin = new JButton("Sin");
-		buttonList.add(sin);
+		trigButtons.add(sin);
 
 		tan = new JButton("Tan");
-		buttonList.add(tan);
+		trigButtons.add(tan);
 
 		acos = new JButton("cos^-1");
-		buttonList.add(acos);
+		trigButtons.add(acos);
 
 		asin = new JButton("sin^-1");
-		buttonList.add(asin);
+		trigButtons.add(asin);
 
 		atan = new JButton("tan^-1");
-		buttonList.add(atan);
+		trigButtons.add(atan);
 
 		cancel = new JButton("C");
-		buttonList.add(cancel);
 
 		calc = new Calculator();
 	}
@@ -138,8 +141,8 @@ public class CalculatorUI implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		final Object source = e.getSource();
 		// check 0-9 and update textfield
-		for (int i = 10; i > 0; i--) {
-			if (source == buttonList.get(i)) {
+		for (int i = 0; i < numButtons.size(); i++) {
+			if (source == numButtons.get(i)) {
 				// Insert the buttonvalue: method inserts rather than replaces
 				// because the text.select() method was not called previously
 				text.replaceSelection(String.valueOf(i));
@@ -237,10 +240,28 @@ public class CalculatorUI implements ActionListener {
 			panel.setBorder(BorderFactory.createEmptyBorder());
 		}
 
-		// add action listener to all buttons
-		for (JButton button : buttonList) {
+		// add action listener to trigonometric buttons
+		for (JButton button : trigButtons) {
 			button.addActionListener(this);
 		}
+
+		// add action listener to function buttons
+		for (JButton button : funcButtons) {
+			button.addActionListener(this);
+		}
+
+		// add action listener to primitive buttons
+		for (JButton button : primButtons) {
+			button.addActionListener(this);
+		}
+
+		// add action listener to number buttons
+		for (JButton button : numButtons) {
+			button.addActionListener(this);
+		}
+
+		// add action listener for C button
+		cancel.addActionListener(this);
 
 		// used for panel and button colors
 		Color blueColor = Color.getHSBColor(0.575f, 0.4f, 0.7f);
@@ -259,7 +280,7 @@ public class CalculatorUI implements ActionListener {
         int x = 0;      // used for grid placement
         int y = 3;      // used for grid placement
     
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < numButtons.size(); i++) {
             if (i == 0) {
                 con.gridwidth = 3;
 	
@@ -267,8 +288,8 @@ public class CalculatorUI implements ActionListener {
 
             con.gridx = x;
             con.gridy = y;
-			buttonList.get(i).setBackground(lightGrayColor);
-            numPanel.add(buttonList.get(i), con);
+			numButtons.get(i).setBackground(lightGrayColor);
+            numPanel.add(numButtons.get(i), con);
 
 			con.gridwidth = 1;
 
@@ -295,10 +316,10 @@ public class CalculatorUI implements ActionListener {
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (int i = 10; i < 15; i ++) {
-			primPanel.add(buttonList.get(i), con);
+		for (JButton button : primButtons) {
+			primPanel.add(button, con);
 			con.gridy++;
-			buttonList.get(i).setBackground(blueColor);
+			button.setBackground(blueColor);
 		}
 
 		// functions panel
@@ -309,9 +330,9 @@ public class CalculatorUI implements ActionListener {
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (int i = 15; i < 18; i ++) {
-			funcPanel.add(buttonList.get(i), con);
-			buttonList.get(i).setBackground(blueColor);
+		for (JButton button : funcButtons) {
+			funcPanel.add(button, con);
+			button.setBackground(blueColor);
 			con.gridx++;
 		}
 
@@ -323,9 +344,9 @@ public class CalculatorUI implements ActionListener {
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (int i = 18; i < 21; i ++) {
-			trigPanel.add(buttonList.get(i), con);
-			buttonList.get(i).setBackground(blueColor);
+		for (int i = 0; i < 3; i ++) {
+			trigPanel.add(trigButtons.get(i), con);
+			trigButtons.get(i).setBackground(blueColor);
 
 			con.gridx++;
 		}
@@ -338,16 +359,16 @@ public class CalculatorUI implements ActionListener {
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (int i = 21; i < 24; i ++) {
-			invTrigPanel.add(buttonList.get(i), con);
-			buttonList.get(i).setBackground(darkGrayColor);
+		for (int i = 3; i < trigButtons.size(); i ++) {
+			invTrigPanel.add(trigButtons.get(i), con);
+			trigButtons.get(i).setBackground(darkGrayColor);
 			con.gridx++;
 		}
 
 		// C panel
 		cPanel.setBackground(blueColor);
-		cPanel.add(buttonList.get(24));
-		buttonList.get(24).setBackground(darkGrayColor);
+		cPanel.add(cancel);
+		cancel.setBackground(darkGrayColor);
 
 
 		con.fill = GridBagConstraints.BOTH;

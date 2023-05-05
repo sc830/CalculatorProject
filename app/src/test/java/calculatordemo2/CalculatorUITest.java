@@ -46,7 +46,7 @@ class CalculatorUITest {
     @Test
     public void writeZeroToDisplay() {
        
-        ActionEvent e = new ActionEvent(classUnderTest.numButtons.get(0), 
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.getNumButtons().get(0), 
                                         ActionEvent.ACTION_PERFORMED, 
                                         "");
         classUnderTest.actionPerformed(e);

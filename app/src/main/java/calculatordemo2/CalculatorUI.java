@@ -2,21 +2,17 @@ package calculatordemo2;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import static javax.swing.WindowConstants.*;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
-import javafx.scene.layout.Border;
-
 import java.util.ArrayList;
 import java.awt.GridBagLayout;
 
@@ -29,105 +25,50 @@ import java.awt.GridBagLayout;
 public class CalculatorUI implements ActionListener {
 	public final JFrame frame;
 	public final JTextArea text;
-	public final JButton add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan, acos, asin, atan;
-	public ArrayList<JButton> trigButtons, primButtons, numButtons, funcButtons;
-	public ArrayList<JPanel> panels;
+	//public final JButton add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan, acos, asin, atan;
+	public ArrayList<CalculatorPanel> panels;
 	public final Calculator calc;
-	public final JPanel mainPanel, numPanel, primPanel, funcPanel, trigPanel, invTrigPanel, cPanel;
+	public final JPanel mainPanel;
+	public final Buttons buttonMaster; // creates and organizes all buttons into lists
+	public final CalculatorPanel numPanel, primPanel, funcPanel, trigPanel, invTrigPanel, cPanel;
 
 	/**
 	 * The main top level GUI of the calculator and it's frame, button, and text area for # display
 	 */
 	public CalculatorUI() {
-		trigButtons = new ArrayList<>();
-		primButtons = new ArrayList<>();
-		numButtons = new ArrayList<>();
-		funcButtons = new ArrayList<>();
+		buttonMaster = new Buttons();
 		panels = new ArrayList<>();
+		text = new JTextArea(2, 25);
+		calc = new Calculator();
 
 		frame = new JFrame("Calculator");
 		frame.setResizable(true);
 		mainPanel = new JPanel(new GridBagLayout());
-		numPanel = new JPanel(new GridBagLayout());
-		panels.add(numPanel);
-		primPanel = new JPanel(new GridBagLayout());
-		panels.add(primPanel);
-		funcPanel = new JPanel(new GridBagLayout());
-		panels.add(funcPanel);
-		trigPanel = new JPanel(new GridBagLayout());
-		panels.add(trigPanel);
-		invTrigPanel = new JPanel(new GridBagLayout());
-		panels.add(invTrigPanel);
-		cPanel = new JPanel();
-		panels.add(cPanel);
-		text = new JTextArea(2, 25);
 
-		String value = "";
-		JButton buttonHolder;
-		for (int i = 0; i < 10; i++) {
-			value = String.valueOf(i);
-			buttonHolder = new JButton(value);
-			numButtons.add(buttonHolder);
-		}
+		numPanel = new CalculatorPanel(buttonMaster.getNumButtons(), this);
 
-		// create buttons and add to master list
-		add = new JButton("+");
-		primButtons.add(add);
+		primPanel = new CalculatorPanel(buttonMaster.getPrimButtons(), this);
 
-		sub = new JButton("-");
-		primButtons.add(sub);
+		funcPanel = new CalculatorPanel(buttonMaster.getFuncButtons(), this);
 
-		mult = new JButton("*");
-		primButtons.add(mult);
+		trigPanel = new CalculatorPanel(buttonMaster.getTrigButtons(), this);
 
-		div = new JButton("/");
-		primButtons.add(div);
+		invTrigPanel = new CalculatorPanel(buttonMaster.getInvTrigButtons(), this);
 
-		equal = new JButton("=");
-		primButtons.add(equal);
-
-		sqrRt = new JButton("√");
-		funcButtons.add(sqrRt);
-
-		sqr = new JButton("x*x");
-		funcButtons.add(sqr);
-
-		inverse = new JButton("1/x");
-		funcButtons.add(inverse);
-
-		cos = new JButton("Cos");
-		trigButtons.add(cos);
-
-		sin = new JButton("Sin");
-		trigButtons.add(sin);
-
-		tan = new JButton("Tan");
-		trigButtons.add(tan);
-
-		acos = new JButton("cos^-1");
-		trigButtons.add(acos);
-
-		asin = new JButton("sin^-1");
-		trigButtons.add(asin);
-
-		atan = new JButton("tan^-1");
-		trigButtons.add(atan);
-
-		cancel = new JButton("C");
-
-		calc = new Calculator();
+		cPanel = new CalculatorPanel(buttonMaster.getMiscButtons(), this);
 	}
 
 	/**
 	 * Initializes and sets the frame size, buttons, panels. The main runner method of the UI class.
 	 */
 	public void init() {
-		frame.setSize(500,335);
+		frame.setSize(400,335);
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		frame.add(text, BorderLayout.CENTER);
 		
 		// function populates and arranges panels
 		initPanels();
+
 
 		frame.add(mainPanel, BorderLayout.SOUTH);
 		frame.setVisible(true);
@@ -141,67 +82,67 @@ public class CalculatorUI implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		final Object source = e.getSource();
 		// check 0-9 and update textfield
-		for (int i = 0; i < numButtons.size(); i++) {
-			if (source == numButtons.get(i)) {
+		for (int i = 0; i < buttonMaster.getNumButtons().size(); i++) {
+			if (source == buttonMaster.getNumButtons().get(i)) {
 				// Insert the buttonvalue: method inserts rather than replaces
 				// because the text.select() method was not called previously
 				text.replaceSelection(String.valueOf(i));
 				return;
 			}
 		}
-		if (source == add) {
+		if (source == buttonMaster.getPrimButtons().get(0)) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.add, reader()));
 		}
-		if (source == sub) {
+		if (source == buttonMaster.getPrimButtons().get(1)) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.subtract, reader()));
 		}
-		if (source == mult) {
+		if (source == buttonMaster.getPrimButtons().get(2)) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.multiply,
 					reader()));
 		}
-		if (source == div) {
+		if (source == buttonMaster.getPrimButtons().get(3)) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.divide, reader()));
 		}
-		if (source == sqr) {
+		if (source == buttonMaster.getFuncButtons().get(0)) {
 			writer(calc.calcScience(Calculator.singleOperator.square,
 					reader()));
 		}
-		if (source == sqrRt) {
+		if (source == buttonMaster.getFuncButtons().get(1)) {
 			writer(calc.calcScience(Calculator.singleOperator.squareRoot,
 					reader()));
 		}
-		if (source == inverse) {
+		if (source == buttonMaster.getFuncButtons().get(2)) {
 			writer(calc.calcScience(
 					Calculator.singleOperator.oneDevidedBy, reader()));
 		}
-		if (source == cos) {
+		if (source == buttonMaster.getTrigButtons().get(0)) {
 			writer(calc.calcScience(Calculator.singleOperator.cos,
 					reader()));
 		}
-		if (source == sin) {
+		if (source == buttonMaster.getTrigButtons().get(1)) {
 			writer(calc.calcScience(Calculator.singleOperator.sin,
 					reader()));
 		}
-		if (source == tan) {
+		if (source == buttonMaster.getTrigButtons().get(2)) {
 			writer(calc.calcScience(Calculator.singleOperator.tan,
 					reader()));
 		}
-		if (source == acos) {
+		if (source == buttonMaster.getInvTrigButtons().get(0)) {
 			writer(calc.calcScience(Calculator.singleOperator.acos,
 					reader()));
 		}
-		if (source == asin) {
+		if (source == buttonMaster.getInvTrigButtons().get(1)) {
 			writer(calc.calcScience(Calculator.singleOperator.asin,
 					reader()));
 		}
-		if (source == atan) {
+		if (source == buttonMaster.getInvTrigButtons().get(2)) {
 			writer(calc.calcScience(Calculator.singleOperator.atan,
 					reader()));
 		}
-		if (source == equal) {
+		if (source == buttonMaster.getPrimButtons().get(4)) {
 			writer(calc.calculateEqual(reader()));
 		}
-		if (source == cancel) {
+		if (source == buttonMaster.getMiscButtons().get(0)) {
 			writer(calc.reset());
 		}
 		// for easy continued calculations/copy
@@ -235,141 +176,74 @@ public class CalculatorUI implements ActionListener {
 
 	// create layout for panels and add corresponding buttons
 	public void initPanels() {
-
-		for (JPanel panel : panels) {
-			panel.setBorder(BorderFactory.createEmptyBorder());
-		}
-
-		// add action listener to trigonometric buttons
-		for (JButton button : trigButtons) {
-			button.addActionListener(this);
-		}
-
-		// add action listener to function buttons
-		for (JButton button : funcButtons) {
-			button.addActionListener(this);
-		}
-
-		// add action listener to primitive buttons
-		for (JButton button : primButtons) {
-			button.addActionListener(this);
-		}
-
-		// add action listener to number buttons
-		for (JButton button : numButtons) {
-			button.addActionListener(this);
-		}
-
-		// add action listener for C button
-		cancel.addActionListener(this);
+		System.out.println("initPanels call");
 
 		// used for panel and button colors
 		Color blueColor = Color.getHSBColor(0.575f, 0.4f, 0.7f);
 		Color darkGrayColor = Color.getHSBColor(0.575f, 0.2f, 0.7f);
 		Color lightGrayColor = Color.getHSBColor(0.575f, 0.2f, 0.85f);
 
-
-		// number panel
-		numPanel.setBackground(blueColor);
 		GridBagConstraints con = new GridBagConstraints();
+
+		// number
         con.fill = GridBagConstraints.BOTH;
         con.weightx = 0.5;
         con.insets = new Insets(5,5,5,5);
         con.gridwidth = 1;
-    
-        int x = 0;      // used for grid placement
-        int y = 3;      // used for grid placement
-    
-        for (int i = 0; i < numButtons.size(); i++) {
-            if (i == 0) {
-                con.gridwidth = 3;
-	
-            }
+        con.gridx = 0;      // used for grid placement
+        con.gridy = 3;      // used for grid placement
 
-            con.gridx = x;
-            con.gridy = y;
-			numButtons.get(i).setBackground(lightGrayColor);
-            numPanel.add(numButtons.get(i), con);
-
-			con.gridwidth = 1;
-
-            if (i != 0) {
-                x++;
-            }
-			else {
-				y--;
-			}
-            
-            if (x == 3) {
-                x = 0;
-                y--;
-            }
-        }
-
-		// primitives panel
-		primPanel.setBackground(darkGrayColor);
-		con.fill = GridBagConstraints.HORIZONTAL;
-        con.weightx = 0.5;
-        con.insets = new Insets(5,5,5,5);
-        con.gridwidth = 1;
-
-		con.gridx = 0;
-		con.gridy = 0;
-
-		for (JButton button : primButtons) {
-			primPanel.add(button, con);
-			con.gridy++;
-			button.setBackground(blueColor);
-		}
+		numPanel.colorPanel(blueColor, lightGrayColor);
+		numPanel.addButtonsToPanel(con, "number grid");
 
 		// functions panel
-		funcPanel.setBackground(darkGrayColor);
-        con.weightx = 0.5;
+		con.weightx = 0.5;
         con.gridwidth = 1;
-
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (JButton button : funcButtons) {
-			funcPanel.add(button, con);
-			button.setBackground(blueColor);
-			con.gridx++;
-		}
+		funcPanel.colorPanel(darkGrayColor, blueColor);
+		funcPanel.addButtonsToPanel(con, "horizontal");
+
 
 		// trig panel
-		trigPanel.setBackground(darkGrayColor);
         con.weightx = 0.5;
         con.gridwidth = 1;
-
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (int i = 0; i < 3; i ++) {
-			trigPanel.add(trigButtons.get(i), con);
-			trigButtons.get(i).setBackground(blueColor);
+		trigPanel.colorPanel(darkGrayColor, blueColor);
+		trigPanel.addButtonsToPanel(con, "horizontal");
 
-			con.gridx++;
-		}
 
 		// inverse trig panel
-		invTrigPanel.setBackground(blueColor);
         con.weightx = 0.5;
         con.gridwidth = 1;
-
 		con.gridx = 0;
 		con.gridy = 0;
 
-		for (int i = 3; i < trigButtons.size(); i ++) {
-			invTrigPanel.add(trigButtons.get(i), con);
-			trigButtons.get(i).setBackground(darkGrayColor);
-			con.gridx++;
-		}
+		invTrigPanel.colorPanel(blueColor, darkGrayColor);
+		invTrigPanel.addButtonsToPanel(con, "horizontal");
+
+		// primitive operations panel
+        con.weightx = 0.5;
+        con.gridwidth = 1;
+		con.gridx = 0;
+		con.gridy = 0;
+
+		primPanel.colorPanel(blueColor, darkGrayColor);
+		primPanel.addButtonsToPanel(con, "vertical");
+
 
 		// C panel
-		cPanel.setBackground(blueColor);
-		cPanel.add(cancel);
-		cancel.setBackground(darkGrayColor);
+		con.gridx = 0;
+		con.gridy = 0;
 
+		cPanel.colorPanel(blueColor, darkGrayColor);
+		cPanel.addButtonsToPanel(con, "horizontal");
+
+
+		// add subpanels to main panel
 
 		con.fill = GridBagConstraints.BOTH;
 		con.insets = new Insets(0,0,0,0);
@@ -382,7 +256,7 @@ public class CalculatorUI implements ActionListener {
         con.gridx = 0;
         con.gridy = 5;
         // add numPanel to main panel
-        mainPanel.add(numPanel, con);
+        mainPanel.add(numPanel.getJPanel(), con);
 
 		// modify constraints for trigPanel
         con.gridwidth = 10;
@@ -392,7 +266,7 @@ public class CalculatorUI implements ActionListener {
         con.gridx = 0;
         con.gridy = 0;
         // add to main panel
-        mainPanel.add(trigPanel, con);
+        mainPanel.add(trigPanel.getJPanel(), con);
 
 		// modify constraints for invTrigPanel
         con.gridwidth = 10;
@@ -402,7 +276,7 @@ public class CalculatorUI implements ActionListener {
         con.gridx = 0;
         con.gridy = 1;
         // add to main panel
-        mainPanel.add(invTrigPanel, con);
+        mainPanel.add(invTrigPanel.getJPanel(), con);
 
 		// modify constraints for cPanel
         con.gridwidth = 1;
@@ -412,7 +286,7 @@ public class CalculatorUI implements ActionListener {
         con.gridx = 8;
         con.gridy = 2;
         // add to main panel
-        frame.add(cPanel, BorderLayout.EAST);
+        frame.add(cPanel.getJPanel(), BorderLayout.EAST);
 
 		// modify constraints for funcPanel
         con.gridwidth = 8;
@@ -422,7 +296,7 @@ public class CalculatorUI implements ActionListener {
         con.gridx = 0;
         con.gridy = 2;
         // add to main panel
-        mainPanel.add(funcPanel, con);
+        mainPanel.add(funcPanel.getJPanel(), con);
 
 		// modify constraints for primPanel
 		con.gridwidth = 1;
@@ -431,7 +305,8 @@ public class CalculatorUI implements ActionListener {
         con.weighty = 0.2;
         con.gridx = 8;
         con.gridy = 2;
+		
         // add to main panel
-        mainPanel.add(primPanel, con);
+        mainPanel.add(primPanel.getJPanel(), con);
 	}
 }

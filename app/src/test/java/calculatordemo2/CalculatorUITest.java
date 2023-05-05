@@ -6,7 +6,10 @@ package calculatordemo2;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
+
+import calculatordemo2.Calculator.twoOperator;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 // import java.lang.reflect.Field;  // This brings in the Field feature of Java Reflection
@@ -15,8 +18,8 @@ class CalculatorUITest {
 
     private static CalculatorUI classUnderTest;
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         classUnderTest = new CalculatorUI();
     }
 
@@ -46,7 +49,7 @@ class CalculatorUITest {
     @Test
     public void writeZeroToDisplay() {
        
-        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.getNumButtons().get(0), 
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("0"), 
                                         ActionEvent.ACTION_PERFORMED, 
                                         "");
         classUnderTest.actionPerformed(e);
@@ -55,6 +58,149 @@ class CalculatorUITest {
         assertEquals(expectedDisplayText,actualDisplayText);
     }
 
+    @DisplayName("Testing Button[7] writes zero to display: assumes public fields ")
+    @Test
+    public void writeSevenToDisplay() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("7"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        String expectedDisplayText = "7";
+        String actualDisplayText = classUnderTest.text.getText();
+        assertEquals(expectedDisplayText,actualDisplayText);
+    }
+
+    @DisplayName("Testing that button press after entering first # and operator only shows new #: assumes public fields ")
+    @Test
+    public void writeSecondNumberToDisplay() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("7"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("-"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("2"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        String expectedDisplayText = "2";
+        String actualDisplayText = classUnderTest.text.getText();
+        assertEquals(expectedDisplayText,actualDisplayText);
+    }
+
+    @DisplayName("Testing button press sets num1 correctly: assumes public fields ")
+    @Test
+    public void setNum1to9() {
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("9"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("="), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        Double expected = 9.0;
+        Double actual = classUnderTest.calc.num1;
+        assertEquals(expected,actual);
+    }
+
+    @DisplayName("Testing sequential button presses set num2 correctly: assumes public fields ")
+    @Test
+    public void setNum2to4() {
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("9"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("+"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("4"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("="), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        Double expected = 4.0;
+        Double actual = classUnderTest.calc.num2;
+        assertEquals(expected,actual);
+    }
+
+    @DisplayName("Testing C button clears display: assumes public fields ")
+    @Test
+    public void clearDisplay() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("8"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("C"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        String expectedDisplayText = "";
+        String actualDisplayText = classUnderTest.text.getText();
+        assertEquals(expectedDisplayText,actualDisplayText);
+    }
+
+    @DisplayName("Testing that selecting + operator changes twoOperator mode to add: assumes public fields ")
+    @Test
+    public void modeChangeTest() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("8"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("+"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        twoOperator expected = twoOperator.add;
+        twoOperator actual = classUnderTest.calc.mode;
+        assertEquals(expected,actual);
+    }
+
+    @DisplayName("Testing sequential button presses: assumes public fields ")
+    @Test
+    public void testMultiple() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("3"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        classUnderTest.actionPerformed(e);
+        classUnderTest.actionPerformed(e);
+        classUnderTest.actionPerformed(e);
+        String expected = "3333";
+        String actual = classUnderTest.text.getText();
+        assertEquals(expected,actual);
+    }
+
+    @DisplayName("Testing that pressing primitive operator clears display: assumes public fields ")
+    @Test
+    public void operatorClearsDisplay() {
+       
+        ActionEvent e = new ActionEvent(classUnderTest.buttonMaster.get("9"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        e = new ActionEvent(classUnderTest.buttonMaster.get("/"), 
+                                        ActionEvent.ACTION_PERFORMED, 
+                                        "");
+        classUnderTest.actionPerformed(e);
+        String expected = "";
+        String actual = classUnderTest.text.getText();
+        assertEquals(expected,actual);
+    }
+
+    
+    
     @Test 
     void appPanelIsCreated() {
         assertNotNull(classUnderTest, "app should have a panel object");

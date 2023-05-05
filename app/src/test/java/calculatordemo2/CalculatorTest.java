@@ -3,15 +3,15 @@ import org.junit.jupiter.api.Test;
 
 import calculatordemo2.Calculator.twoOperator;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorTest {
     private static Calculator classUnderTest;
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         classUnderTest = new Calculator();
     }
 

@@ -35,7 +35,7 @@ public class Buttons {
 			buttonHolder = new JButton(value);
 			numButtons.add(buttonHolder);
 		}
-        
+
         add = new JButton("+");
 		primButtons.add(add);
 
@@ -112,6 +112,29 @@ public class Buttons {
 
     public ArrayList<JButton> getMiscButtons() {
         return miscButtons;
+    }
+
+    // returns the JButton object with corresponding label
+    public JButton get(String label) {
+        for (JButton button : numButtons) {
+            if (label.equals(button.getText())) { return button; }
+        }
+        for (JButton button : primButtons) {
+            if (label.equals(button.getText())) { return button; }
+        }
+        for (JButton button : trigButtons) {
+            if (label.equals(button.getText())) { return button; }
+        }
+        for (JButton button : invTrigButtons) {
+            if (label.equals(button.getText())) { return button; }
+        }
+        for (JButton button : funcButtons) {
+            if (label.equals(button.getText())) { return button; }
+        }
+        for (JButton button : miscButtons) {
+            if (label.equals(button.getText())) { return button; }
+        }
+        return new JButton("null"); // never reached if called properly
     }
     
 }

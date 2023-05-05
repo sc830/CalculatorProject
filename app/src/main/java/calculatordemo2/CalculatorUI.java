@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static javax.swing.WindowConstants.*;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,8 +24,7 @@ import java.awt.GridBagLayout;
 public class CalculatorUI implements ActionListener {
 	public final JFrame frame;
 	public final JTextArea text;
-	//public final JButton add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan, acos, asin, atan;
-	public ArrayList<CalculatorPanel> panels;
+	public final JButton add, sub, mult, div, equal, cancel, sqrRt, sqr, inverse, cos, sin, tan, acos, asin, atan;
 	public final Calculator calc;
 	public final JPanel mainPanel;
 	public final Buttons buttonMaster; // creates and organizes all buttons into lists
@@ -37,25 +35,38 @@ public class CalculatorUI implements ActionListener {
 	 */
 	public CalculatorUI() {
 		buttonMaster = new Buttons();
-		panels = new ArrayList<>();
 		text = new JTextArea(2, 25);
 		calc = new Calculator();
 
 		frame = new JFrame("Calculator");
 		frame.setResizable(true);
+
 		mainPanel = new JPanel(new GridBagLayout());
-
 		numPanel = new CalculatorPanel(buttonMaster.getNumButtons(), this);
-
 		primPanel = new CalculatorPanel(buttonMaster.getPrimButtons(), this);
-
 		funcPanel = new CalculatorPanel(buttonMaster.getFuncButtons(), this);
-
 		trigPanel = new CalculatorPanel(buttonMaster.getTrigButtons(), this);
-
 		invTrigPanel = new CalculatorPanel(buttonMaster.getInvTrigButtons(), this);
-
 		cPanel = new CalculatorPanel(buttonMaster.getMiscButtons(), this);
+
+		// creates global variable names for each button
+		// this isn't necessary, but makes actionPerformed() more readable
+		// see older versions for other implementation
+		add = buttonMaster.get("+");
+		sub = buttonMaster.get("-");
+		mult = buttonMaster.get("*");
+		div = buttonMaster.get("/");
+		equal = buttonMaster.get("=");
+		cancel = buttonMaster.get("C");
+		sqrRt = buttonMaster.get("√");
+		inverse = buttonMaster.get("1/x");
+		sqr = buttonMaster.get("x^2");
+		cos = buttonMaster.get("Cos");
+		sin = buttonMaster.get("Sin");
+		tan = buttonMaster.get("Tan");
+		acos = buttonMaster.get("cos^-1");
+		asin = buttonMaster.get("sin^-1");
+		atan = buttonMaster.get("tan^-1");
 	}
 
 	/**
@@ -90,59 +101,59 @@ public class CalculatorUI implements ActionListener {
 				return;
 			}
 		}
-		if (source == buttonMaster.getPrimButtons().get(0)) {
+		if (source == add) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.add, reader()));
 		}
-		if (source == buttonMaster.getPrimButtons().get(1)) {
+		if (source == sub) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.subtract, reader()));
 		}
-		if (source == buttonMaster.getPrimButtons().get(2)) {
+		if (source == mult) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.multiply,
 					reader()));
 		}
-		if (source == buttonMaster.getPrimButtons().get(3)) {
+		if (source == div) {
 			writer(calc.twoOpCaller(Calculator.twoOperator.divide, reader()));
 		}
-		if (source == buttonMaster.getFuncButtons().get(0)) {
+		if (source == sqr) {
 			writer(calc.calcScience(Calculator.singleOperator.square,
 					reader()));
 		}
-		if (source == buttonMaster.getFuncButtons().get(1)) {
+		if (source == sqrRt) {
 			writer(calc.calcScience(Calculator.singleOperator.squareRoot,
 					reader()));
 		}
-		if (source == buttonMaster.getFuncButtons().get(2)) {
+		if (source == inverse) {
 			writer(calc.calcScience(
 					Calculator.singleOperator.oneDevidedBy, reader()));
 		}
-		if (source == buttonMaster.getTrigButtons().get(0)) {
+		if (source == cos) {
 			writer(calc.calcScience(Calculator.singleOperator.cos,
 					reader()));
 		}
-		if (source == buttonMaster.getTrigButtons().get(1)) {
+		if (source == sin) {
 			writer(calc.calcScience(Calculator.singleOperator.sin,
 					reader()));
 		}
-		if (source == buttonMaster.getTrigButtons().get(2)) {
+		if (source == tan) {
 			writer(calc.calcScience(Calculator.singleOperator.tan,
 					reader()));
 		}
-		if (source == buttonMaster.getInvTrigButtons().get(0)) {
+		if (source == acos) {
 			writer(calc.calcScience(Calculator.singleOperator.acos,
 					reader()));
 		}
-		if (source == buttonMaster.getInvTrigButtons().get(1)) {
+		if (source == asin) {
 			writer(calc.calcScience(Calculator.singleOperator.asin,
 					reader()));
 		}
-		if (source == buttonMaster.getInvTrigButtons().get(2)) {
+		if (source == atan) {
 			writer(calc.calcScience(Calculator.singleOperator.atan,
 					reader()));
 		}
-		if (source == buttonMaster.getPrimButtons().get(4)) {
+		if (source == equal) {
 			writer(calc.calculateEqual(reader()));
 		}
-		if (source == buttonMaster.getMiscButtons().get(0)) {
+		if (source == cancel) {
 			writer(calc.reset());
 		}
 		// for easy continued calculations/copy

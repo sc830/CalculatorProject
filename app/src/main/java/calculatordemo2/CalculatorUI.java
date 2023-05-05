@@ -185,8 +185,6 @@ public class CalculatorUI implements ActionListener {
 
 	// create layout for panels and add corresponding buttons
 	public void initPanels() {
-		System.out.println("initPanels call");
-
 		// used for panel and button colors
 		Color blueColor = Color.getHSBColor(0.575f, 0.4f, 0.7f);
 		Color darkGrayColor = Color.getHSBColor(0.575f, 0.2f, 0.7f);

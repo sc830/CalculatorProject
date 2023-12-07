@@ -1,10 +1,3 @@
-### Table of Contents ###
-Project Overview
-Features
-Getting Started
-Skill Development
-Acknowledgments
-
 ### Project Overview ###
 In this project, a basic calculator application was provided, and I was tasked with adding trigonometric functions to the calculator, implementing unit testing to prevent errors, and improving its GUI to make the calculator more visually appealing. This project provided an opportunity to deepen my understanding of utilizing Java Swing, JUnit, code refactoring, and modular design.
 

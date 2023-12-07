@@ -21,5 +21,5 @@ Code Revision and Restructuring: Gained experience in modifying existing code to
 SOLID Refactoring: Worked through project redesign to better reflect SOLID principles.
 Unit Testing: Gained an understanding of the importance of unit testing and how it is implemented.
 
-Acknowledgments
+### Acknowledgements ###
 Thanks to Ted Lehr for providing the initial calculator application. This project was built upon their work.

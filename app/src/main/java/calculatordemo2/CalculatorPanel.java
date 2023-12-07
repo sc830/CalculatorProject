@@ -68,7 +68,6 @@ public class CalculatorPanel {
             }
         }
         else if (orientation.equals("number grid")) {
-            System.out.println("number panel grid");
             con.gridx = 0;
             con.gridy = 3;
             
